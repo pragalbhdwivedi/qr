@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BDGOI Quick Access</title>
+  <meta name="description" content="Quick access landing page for admissions, inquiry, recruitment, school systems, and official communication links." />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-soft: #111111;
+      --panel: rgba(255,255,255,0.06);
+      --panel-strong: rgba(255,255,255,0.1);
+      --text: #f5f5f5;
+      --muted: #b8b8b8;
+      --yellow: #ffd84d;
+      --yellow-soft: rgba(255,216,77,0.14);
+      --red: #e50914;
+      --line: rgba(255,255,255,0.12);
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius-xl: 24px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        linear-gradient(180deg, rgba(229,9,20,0.16), rgba(229,9,20,0) 22%),
+        radial-gradient(circle at top right, rgba(255,216,77,0.1), transparent 25%),
+        linear-gradient(135deg, #0a0a0a, #090909 42%, #111 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(10, 10, 10, 0.76);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--yellow), #ffb400);
+      color: #111;
+      font-weight: 900;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-text h1 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-text p {
+      margin: 2px 0 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .top-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      background: var(--red);
+      color: white;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .top-cta:hover { transform: translateY(-1px); box-shadow: 0 12px 24px rgba(229,9,20,0.28); }
+
+    .hero {
+      padding: 56px 0 30px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-main, .hero-side {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-main::before {
+      content: "BOARDING NOW";
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: #111;
+      background: var(--yellow);
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+
+    .hero-content {
+      padding: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--yellow);
+      font-weight: 800;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--yellow);
+      box-shadow: 0 0 18px rgba(255,216,77,0.75);
+    }
+
+    .hero h2 {
+      margin: 16px 0 12px;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+    }
+
+    .hero h2 span { color: var(--yellow); }
+
+    .hero p {
+      margin: 0;
+      max-width: 760px;
+      color: #dddddd;
+      font-size: 1.02rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--red);
+      color: white;
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      border-color: var(--line);
+      color: white;
+    }
+    .btn-yellow {
+      background: var(--yellow);
+      color: #111;
+    }
+
+    .hero-side {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      background:
+        linear-gradient(180deg, rgba(255,216,77,0.09), rgba(255,255,255,0.04)),
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    }
+
+    .display-board {
+      border: 1px solid rgba(255,216,77,0.28);
+      background: rgba(0,0,0,0.34);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .display-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .display-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .display-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .display-card strong {
+      display: block;
+      font-size: 0.88rem;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .display-card span {
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .ticker {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      font-size: 0.84rem;
+      color: #efefef;
+    }
+
+    section {
+      padding: 12px 0 30px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: clamp(1.3rem, 2vw, 1.8rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.6;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      position: relative;
+      min-height: 168px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04)),
+        linear-gradient(135deg, rgba(229,9,20,0.14), rgba(255,216,77,0.05));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(255,216,77,0.35);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05)),
+        linear-gradient(135deg, rgba(229,9,20,0.18), rgba(255,216,77,0.08));
+    }
+
+    .card a {
+      display: block;
+      height: 100%;
+      padding: 18px;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,216,77,0.12);
+      border: 1px solid rgba(255,216,77,0.22);
+      color: var(--yellow);
+      font-size: 1.2rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #111;
+      background: var(--yellow);
+    }
+
+    .card h4 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      max-width: 32ch;
+    }
+
+    .card-arrow {
+      position: absolute;
+      right: 16px;
+      bottom: 14px;
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .footer {
+      padding: 24px 0 56px;
+    }
+
+    .footer-panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .footer small {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 780px) {
+      .topbar-inner, .section-head, .footer-panel {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero-content { padding: 24px; }
+    }
+
+    @media (max-width: 540px) {
+      .wrap { width: min(calc(100% - 20px), var(--max)); }
+      .grid, .display-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 28px; }
+      .card { min-height: 150px; }
+      .brand-text h1 { font-size: 0.92rem; }
+      .top-cta { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">BD</div>
+        <div class="brand-text">
+          <h1>Badridhar Dwivedi Group of Institutions</h1>
+          <p>Official quick access portal</p>
+        </div>
+      </div>
+      <a class="top-cta" href="#communications">Open Quick Links</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-main">
+          <div class="hero-content">
+            <div class="eyebrow"><span class="eyebrow-dot"></span> Scan. Tap. Reach the right desk.</div>
+            <h2>Your <span>single QR landing page</span> for admissions, support, systems, and school communication.</h2>
+            <p>
+              Built like airport signage with the visual punch of a streaming platform. Fast decisions, bold navigation, zero clutter. Parents, students, staff, applicants, and visitors can jump straight to the exact destination they need.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#admissions">Admissions</a>
+              <a class="btn btn-secondary" href="#social">Social & Contact</a>
+              <a class="btn btn-yellow" href="#systems">Staff & Systems</a>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-side">
+          <div class="display-board">
+            <div class="display-head">
+              <span>Terminal A</span>
+              <span>Now Serving</span>
+            </div>
+            <div class="display-grid">
+              <div class="display-card">
+                <strong>Parents</strong>
+                <span>Admission form, inquiry, fee help, app download.</span>
+              </div>
+              <div class="display-card">
+                <strong>Students</strong>
+                <span>CMS login, Microsoft 365, attendance access.</span>
+              </div>
+              <div class="display-card">
+                <strong>Applicants</strong>
+                <span>Recruitment, careers, interview response forms.</span>
+              </div>
+              <div class="display-card">
+                <strong>Visitors</strong>
+                <span>Main website, social media, direct WhatsApp contact.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ticker">
+            <span class="chip">✦ Direct WhatsApp</span>
+            <span class="chip">✦ Admission Desk</span>
+            <span class="chip">✦ Recruitment</span>
+            <span class="chip">✦ Student Login</span>
+            <span class="chip">✦ Mobile App</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="communications">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h3>Communication Hub</h3>
+            <p>Use these as the main traffic lanes. Each card can send the visitor to a form, page, social profile, or login system.</p>
+          </div>
+        </div>
+        <div class="grid" id="communication-grid"></div>
+      </div>
+    </section>
+
+    <section id="admissions">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h3>Admissions & Inquiry</h3>
+            <p>Designed for poster QR traffic. Keep the path brutally simple: tap, land, apply. No maze. No nonsense.</p>
+          </div>
+        </div>
+        <div class="grid" id="admission-grid"></div>
+      </div>
+    </section>
+
+    <section id="social">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h3>Social & Public Presence</h3>
+            <p>Useful for awareness campaigns, events, admissions posters, and trust-building. The digital equivalent of a polished front gate.</p>
+          </div>
+        </div>
+        <div class="grid" id="social-grid"></div>
+      </div>
+    </section>
+
+    <section id="systems">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h3>Systems, Staff & Student Access</h3>
+            <p>These are operational links: logins, portals, internal systems, attendance, and academic tools. Keep them real. Keep them current.</p>
+          </div>
+        </div>
+        <div class="grid" id="system-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-panel">
+        <div>
+          <strong>BDGOI Quick Access Portal</strong><br />
+          <small>
+            Replace all placeholder links below before publishing on GitHub Pages.<br />
+            Recommended file name: <strong>index.html</strong>
+          </small>
+        </div>
+        <div class="footer-links">
+          <a href="#communications">Top</a>
+          <a href="#admissions">Admissions</a>
+          <a href="#social">Social</a>
+          <a href="#systems">Systems</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const linkGroups = {
+      communications: [
+        {
+          title: "Direct WhatsApp",
+          description: "Instant chat with the admission or support desk.",
+          href: "https://wa.me/917678967000",
+          tag: "Fast Lane",
+          icon: "💬"
+        },
+        {
+          title: "Main Website",
+          description: "Full school website with academic and institutional information.",
+          href: "https://example.com",
+          tag: "Official",
+          icon: "🌐"
+        },
+        {
+          title: "Inquiry Form",
+          description: "For parents or visitors who want a callback or counseling.",
+          href: "https://forms.gle/your-inquiry-form",
+          tag: "Lead Form",
+          icon: "📝"
+        },
+        {
+          title: "Download Mobile App",
+          description: "Install the official school app for updates and communication.",
+          href: "https://example.com/app",
+          tag: "Mobile",
+          icon: "📲"
+        }
+      ],
+      admissions: [
+        {
+          title: "Admission Form",
+          description: "Direct online application for new admissions.",
+          href: "https://forms.gle/your-admission-form",
+          tag: "Apply",
+          icon: "🎓"
+        },
+        {
+          title: "Fee Structure",
+          description: "View the latest class-wise fee details before applying.",
+          href: "#",
+          tag: "Info",
+          icon: "💳"
+        },
+        {
+          title: "Scholarship / Test Form",
+          description: "Optional path for scholarship or admission assessment registration.",
+          href: "https://forms.gle/your-scholarship-form",
+          tag: "Opportunity",
+          icon: "🏅"
+        },
+        {
+          title: "Campus Visit Booking",
+          description: "Schedule a visit and see the school in action.",
+          href: "https://forms.gle/your-campus-visit-form",
+          tag: "Visit",
+          icon: "🏫"
+        }
+      ],
+      social: [
+        {
+          title: "Facebook",
+          description: "News, events, posters, celebrations, and updates.",
+          href: "https://facebook.com/yourpage",
+          tag: "Social",
+          icon: "📘"
+        },
+        {
+          title: "Instagram",
+          description: "Visual updates, reels, achievements, and school culture.",
+          href: "https://instagram.com/yourpage",
+          tag: "Social",
+          icon: "📸"
+        },
+        {
+          title: "YouTube / Video Gallery",
+          description: "Campus videos, event highlights, and promotional content.",
+          href: "https://youtube.com/@yourchannel",
+          tag: "Media",
+          icon: "▶️"
+        },
+        {
+          title: "Location / Map",
+          description: "Guide visitors directly to the campus without the classic small-town treasure hunt.",
+          href: "https://maps.google.com/?q=Badridhar+Dwivedi+Group+of+Institutions",
+          tag: "Visit",
+          icon: "📍"
+        }
+      ],
+      systems: [
+        {
+          title: "Microsoft 365 Login",
+          description: "Student or staff access for Outlook, Teams, and Office tools.",
+          href: "https://www.office.com",
+          tag: "Login",
+          icon: "🪟"
+        },
+        {
+          title: "School CMS Login",
+          description: "School management portal for academic and administrative access.",
+          href: "https://example.com/cms",
+          tag: "Portal",
+          icon: "🗂️"
+        },
+        {
+          title: "HikAccess Attendance",
+          description: "Attendance or access-control portal for staff operations.",
+          href: "https://example.com/hikaccess",
+          tag: "Attendance",
+          icon: "🕒"
+        },
+        {
+          title: "Recruitment / Careers",
+          description: "Application page for teaching, admin, or support roles.",
+          href: "https://forms.gle/your-recruitment-form",
+          tag: "Careers",
+          icon: "💼"
+        }
+      ]
+    };
+
+    function createCard(item) {
+      return `
+        <article class="card">
+          <a href="${item.href}" target="_blank" rel="noopener noreferrer">
+            <div class="card-top">
+              <div class="icon">${item.icon}</div>
+              <span class="tag">${item.tag}</span>
+            </div>
+            <h4>${item.title}</h4>
+            <p>${item.description}</p>
+            <span class="card-arrow">↗</span>
+          </a>
+        </article>
+      `;
+    }
+
+    document.getElementById("communication-grid").innerHTML = linkGroups.communications.map(createCard).join("");
+    document.getElementById("admission-grid").innerHTML = linkGroups.admissions.map(createCard).join("");
+    document.getElementById("social-grid").innerHTML = linkGroups.social.map(createCard).join("");
+    document.getElementById("system-grid").innerHTML = linkGroups.systems.map(createCard).join("");
+  </script>
+</body>
+</html>
