@@ -13,7 +13,6 @@
       --text: #eef2ff;
       --muted: #a9b3d9;
       --accent: #7c9cff;
-      --accent-2: #9ef0c8;
       --border: rgba(255, 255, 255, 0.08);
       --shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
     }
@@ -85,7 +84,7 @@
 
     .controls {
       display: grid;
-      grid-template-columns: 1.2fr 0.55fr 0.55fr auto;
+      grid-template-columns: 1.2fr 0.55fr 0.55fr;
       gap: 12px;
       margin-bottom: 22px;
     }
@@ -101,25 +100,12 @@
     }
 
     input.control,
-    select.control,
-    button.control {
+    select.control {
       font: inherit;
     }
 
     input.control::placeholder {
       color: #8d97c2;
-    }
-
-    button.control {
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--accent), #5f7cff);
-      border: none;
-      font-weight: 700;
-      color: white;
-    }
-
-    button.control:hover {
-      transform: translateY(-1px);
     }
 
     .meta {
@@ -214,6 +200,7 @@
       color: var(--muted);
       text-align: center;
       background: rgba(255, 255, 255, 0.03);
+      grid-column: 1 / -1;
     }
 
     .lightbox {
@@ -279,6 +266,13 @@
       font-size: 0.9rem;
     }
 
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #dce6ff;
+    }
+
     @media (max-width: 900px) {
       .controls {
         grid-template-columns: 1fr 1fr;
@@ -297,6 +291,11 @@
       .actions {
         flex-direction: column;
       }
+
+      .meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
@@ -307,14 +306,15 @@
       <div>
         <h1>BDSPS Banner Gallery 2026</h1>
         <p>
-          Admission campaign banners served from <strong>qr.bdsps.in/assets/banner/</strong>.
-          This page shows poster thumbnails, preview, and direct download links. No nonsense, no treasure hunt.
+          Admission campaign banners served from
+          <strong>https://qr.dgoi.in/assets/banner/</strong>.
+          Browse thumbnails, open preview, and download each file without doing path acrobatics.
         </p>
         <div class="pill-row">
           <span class="pill">225 Banner Images</span>
           <span class="pill">Thumbnail Preview</span>
           <span class="pill">Direct Download</span>
-          <span class="pill">GitHub Pages Friendly</span>
+          <span class="pill">Fast Search</span>
         </div>
       </div>
     </section>
@@ -330,7 +330,6 @@
         <option value="first50">Show: First 50</option>
         <option value="first100">Show: First 100</option>
       </select>
-      <button id="downloadAllBtn" class="control" type="button">Open Folder</button>
     </section>
 
     <div class="meta">
@@ -341,7 +340,8 @@
     <section id="gallery" class="gallery"></section>
 
     <div class="footer-note">
-      Hosted for BDSPS QR access. Update <code>TOTAL_BANNERS</code> later if you add more files.
+      Folder expected: <code>/assets/banner/</code><br />
+      Files expected: <code>BANNER-2026-1.jpg</code> to <code>BANNER-2026-225.jpg</code>
     </div>
   </div>
 
@@ -367,7 +367,6 @@
     const searchInputEl = document.getElementById('searchInput');
     const sortSelectEl = document.getElementById('sortSelect');
     const viewSelectEl = document.getElementById('viewSelect');
-    const downloadAllBtnEl = document.getElementById('downloadAllBtn');
 
     const lightboxEl = document.getElementById('lightbox');
     const lightboxImageEl = document.getElementById('lightboxImage');
@@ -384,53 +383,12 @@
       };
     });
 
-    baseUrlLabelEl.textContent = BASE_URL;
+    baseUrlLabelEl.textContent = `Base Path: ${BASE_URL}`;
 
     function getVisibleLimit(value) {
       if (value === 'first50') return 50;
       if (value === 'first100') return 100;
       return Infinity;
-    }
-
-    function renderGallery() {
-      const searchTerm = searchInputEl.value.trim().toLowerCase();
-      const sortOrder = sortSelectEl.value;
-      const visibleLimit = getVisibleLimit(viewSelectEl.value);
-
-      let filtered = banners.filter(item => item.fileName.toLowerCase().includes(searchTerm));
-
-      filtered.sort((a, b) => sortOrder === 'asc' ? a.number - b.number : b.number - a.number);
-      filtered = filtered.slice(0, visibleLimit);
-
-      resultCountEl.textContent = `${filtered.length} banner${filtered.length === 1 ? '' : 's'} shown`;
-
-      if (!filtered.length) {
-        galleryEl.innerHTML = '<div class="empty">No banners matched your search. The pixels are innocent; the filter is the culprit.</div>';
-        return;
-      }
-
-      galleryEl.innerHTML = filtered.map(item => `
-        <article class="card">
-          <div class="thumb-wrap">
-            <img
-              class="thumb"
-              src="${item.imageUrl}"
-              alt="${item.fileName}"
-              loading="lazy"
-              onclick="openLightbox('${item.imageUrl}', '${item.fileName.replace(/'/g, "\\'")}')"
-              onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="100%" height="100%" fill="#0f1530"/><text x="50%" y="47%" fill="#dbe3ff" font-size="32" font-family="Arial" text-anchor="middle">Image not found</text><text x="50%" y="53%" fill="#94a3d4" font-size="24" font-family="Arial" text-anchor="middle">${item.fileName}</text></svg>')}'"
-            />
-          </div>
-          <div class="card-body">
-            <h3 class="title">${item.fileName}</h3>
-            <p class="subtitle">Poster #${item.number}</p>
-            <div class="actions">
-              <a class="btn" href="${item.imageUrl}" target="_blank" rel="noopener">Preview</a>
-              <a class="btn primary" href="${item.imageUrl}" download="${item.fileName}">Download</a>
-            </div>
-          </div>
-        </article>
-      `).join('');
     }
 
     function openLightbox(src, title) {
@@ -449,17 +407,72 @@
 
     window.openLightbox = openLightbox;
 
+    function renderGallery() {
+      const searchTerm = searchInputEl.value.trim().toLowerCase();
+      const sortOrder = sortSelectEl.value;
+      const visibleLimit = getVisibleLimit(viewSelectEl.value);
+
+      let filtered = banners.filter(item =>
+        item.fileName.toLowerCase().includes(searchTerm)
+      );
+
+      filtered.sort((a, b) =>
+        sortOrder === 'asc' ? a.number - b.number : b.number - a.number
+      );
+
+      filtered = filtered.slice(0, visibleLimit);
+
+      resultCountEl.textContent = `${filtered.length} banner${filtered.length === 1 ? '' : 's'} shown`;
+
+      if (!filtered.length) {
+        galleryEl.innerHTML = `
+          <div class="empty">
+            No banners matched your search. Either the filter is too clever, or the file names are being dramatic.
+          </div>
+        `;
+        return;
+      }
+
+      galleryEl.innerHTML = filtered.map(item => `
+        <article class="card">
+          <div class="thumb-wrap">
+            <img
+              class="thumb"
+              src="${item.imageUrl}"
+              alt="${item.fileName}"
+              loading="lazy"
+              onclick="openLightbox('${item.imageUrl}', '${item.fileName}')"
+              onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,${encodeURIComponent(
+        `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"1000\">
+                  <rect width=\"100%\" height=\"100%\" fill=\"#0f1530\"/>
+                  <text x=\"50%\" y=\"47%\" fill=\"#dbe3ff\" font-size=\"32\" font-family=\"Arial\" text-anchor=\"middle\">Image not found</text>
+                  <text x=\"50%\" y=\"53%\" fill=\"#94a3d4\" font-size=\"24\" font-family=\"Arial\" text-anchor=\"middle\">${item.fileName}</text>
+                </svg>`
+      )}'"
+            />
+          </div>
+          <div class="card-body">
+            <h3 class="title">${item.fileName}</h3>
+            <p class="subtitle">Poster #${item.number}</p>
+            <div class="actions">
+              <a class="btn" href="${item.imageUrl}" target="_blank" rel="noopener">Preview</a>
+              <a class="btn primary" href="${item.imageUrl}" download="${item.fileName}">Download</a>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
     searchInputEl.addEventListener('input', renderGallery);
     sortSelectEl.addEventListener('change', renderGallery);
     viewSelectEl.addEventListener('change', renderGallery);
-    downloadAllBtnEl.addEventListener('click', () => {
-      window.open(`${BASE_URL}/`, '_blank', 'noopener');
-    });
 
     lightboxCloseEl.addEventListener('click', closeLightbox);
+
     lightboxEl.addEventListener('click', (event) => {
       if (event.target === lightboxEl) closeLightbox();
     });
+
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') closeLightbox();
     });
